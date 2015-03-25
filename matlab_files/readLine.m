@@ -22,6 +22,7 @@ function [ paramStart,params,spaces ] = readLine( string )
                    params(end+1) = paramLen;
                    spaces(end+1) = spaceLen;  %might not need, DGG 1/29/2015
                else
+%                    spaces(end+1) = (length(string) - (paramStart(end) + params(end)) - 1);
                    spaces(end+1) = spaceLen;
                    paramStart(end+1) = i;
                    params(end+1) = 1;
