@@ -8,10 +8,10 @@ function [ paramStart,params,spaces ] = readLine( string )
     
     string = string{1};
     
-    for i=1:length(string)
-       if i == length(string)
-           if strcmp(string(i),' ')
-               if ~strcmp(string(i-1),' ')
+    for ii=1:length(string)
+       if ii == length(string)
+           if strcmp(string(ii),' ')
+               if ~strcmp(string(ii-1),' ')
                     params(end+1) = paramLen;
                     spaces(end+1) = spaceLen;
                end
@@ -24,24 +24,24 @@ function [ paramStart,params,spaces ] = readLine( string )
                else
 %                    spaces(end+1) = (length(string) - (paramStart(end) + params(end)) - 1);
                    spaces(end+1) = spaceLen;
-                   paramStart(end+1) = i;
+                   paramStart(end+1) = ii;
                    params(end+1) = 1;
                end
            end
        else
-           if strcmp(string(i),' ')
+           if strcmp(string(ii),' ')
                spaceLen = spaceLen + 1;
            else
                paramLen = paramLen + 1;
-               if i == 1
-                   paramStart(end+1) = i;
-               elseif ~strcmp(string(i-1),' ')
-                   paramStart(end+1) = i;
-               elseif strcmp(string(i-1),' ')
-                   paramStart(end+1) = i;
+               if ii == 1
+                   paramStart(end+1) = ii;
+%                elseif ~strcmp(string(ii-1),' ')
+%                    paramStart(end+1) = ii;
+               elseif strcmp(string(ii-1),' ')
+                   paramStart(end+1) = ii;
                end
-               if i+1 < length(string) - 1
-                   if strcmp(string(i+1),' ')
+               if ii+1 < length(string) - 1
+                   if strcmp(string(ii+1),' ')
                        spaces(end+1) = spaceLen;
                        spaceLen = 0;
                        params(end+1) = paramLen;
