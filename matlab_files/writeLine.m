@@ -3,10 +3,10 @@ function [ wline ] = writeLine( string, index, param, lspaces )
     flag = 0;
     if nargin > 3
         flag = 1;
-        [starts paramLens whitespaces] = readLine(string);
+        [starts, paramLens, whitespaces] = readLine(string);
         whitespaces(1) = whitespaces(1)-length(param)+1;
     else
-        [starts paramLens whitespaces] = readLine(string);
+        [starts, paramLens, whitespaces] = readLine(string);
     end
     sLine = textscan(string{1}, '%s');
     sLine = sLine{1};
