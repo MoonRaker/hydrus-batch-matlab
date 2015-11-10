@@ -1,6 +1,7 @@
 % HYDRUS_Class.m
-% Created by Derek Groenendyk
-% 5/4/2012
+% Derek Groenendyk
+% Created 5/4/2012
+% Updated 11/3/2015
 % Class that calls and runs HYRDUS in Matlab
 
 classdef HYDRUS_Class
@@ -18,7 +19,7 @@ classdef HYDRUS_Class
             if noCMDWindow == 1
                 selectIN.setData('lEnter','f');
                 selectIN.update()
-                command = ['h1d_calc.exe ' hydrus.expFileLocation ' 1 > NUL 2 > NUL'];
+                command = ['h1d_calc.exe ' hydrus.expFileLocation '> NUL 2>&1'];
                 system(command);                
             else
                 selectIN.setData('lEnter','t');

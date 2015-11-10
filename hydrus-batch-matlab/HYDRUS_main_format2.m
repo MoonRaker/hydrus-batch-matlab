@@ -7,12 +7,13 @@
 clear all;
 clc;
 
-noCMDWindow = 1; %set to 1 to NOT have to press enter after each simulation
+noCMDWindow = 0; %set to 1 to NOT have to press enter after each simulation
         
 exp = 'Test'; % directory main name
 % exp = 'Cyclic'; % directory main name
-mainDirectory = 'C:\Temp\HYDRUS_Data\';
-expDirectory = [mainDirectory 'Projects\' exp];
+% mainDirectory = 'C:\Temp\HYDRUS_Data\';
+mainDirectory = 'C:\Derek\ProgrammingFolder\HYDRUS_Data\Projects\';
+expDirectory = [mainDirectory exp];
 
 Hydrus = HYDRUS_Class(expDirectory);
 
@@ -21,10 +22,10 @@ Hydrus = HYDRUS_Class(expDirectory);
 % clay loam, silty clay loam, sandy clay loam, silty clay, clay
 %
 % all of the van Genuchten soils for the 12 main soil types
-usdaSoils = csvread([mainDirectory 'USDARosettaSoils.csv']); 
+% usdaSoils = csvread([mainDirectory 'USDARosettaSoils.csv']); 
 
-paramValues=usdaSoils;
-paramList = {'thr','ths','Alfa','n','Ks'};
+% paramValues=usdaSoils;
+% paramList = {'thr','ths','Alfa','n','Ks'};
 
 
 % list of variable properties with min and max values
@@ -44,7 +45,7 @@ Prechold = repmat([1 0],1,18);
 numrealizs=1;
 
 
-if true
+if false
 %     create PROFILE.DAT object
     profileDAT = PROFILEDAT(expDirectory);
 
@@ -80,65 +81,65 @@ for ii=1:numrealizs
     soiltypeval = 4;
 
 %   create ATMOSPH.IN object
-    atmosphIN = ATMOSPHIN(expDirectory);
+%     atmosphIN = ATMOSPHIN(expDirectory);
     
 %   updates the parameter info
-    atmosphIN.setData('Prec',[topfluxval]);
-    atmosphIN.setData('tAtm',topBCtimes)
-    atmosphIN.setData('Prec',-Prechold(1:infiltcycles*2))
-    atmosphIN.setData('rSoil',rsoilhold(1:infiltcycles*2))
-    atmosphIN.setData('hCritA',rsoilhold(1:infiltcycles*2)*100000)
-    atmosphIN.setData('MaxAL',infiltcycles*2)
+%     atmosphIN.setData('Prec',[topfluxval]);
+%     atmosphIN.setData('tAtm',topBCtimes)
+%     atmosphIN.setData('Prec',-Prechold(1:infiltcycles*2))
+%     atmosphIN.setData('rSoil',rsoilhold(1:infiltcycles*2))
+%     atmosphIN.setData('hCritA',rsoilhold(1:infiltcycles*2)*100000)
+%     atmosphIN.setData('MaxAL',infiltcycles*2)
     
 %   sets up sinusoidal inputs
-    atmosphIN.setData('SinusVar','f')
+%     atmosphIN.setData('SinusVar','f')
     
 %   commits/writes changes to the file (overwrites previous file)
-    atmosphIN.update()        
+%     atmosphIN.update()        
 
 %   set soil parameters
-    selectIN = SELECTORIN(expDirectory);
-    for j=1:length(paramList)
-        if j == 5
-            paramValue = roundn(paramValues(soiltypeval,j),-2); 
-        elseif j == 3
-            paramValue = roundn(paramValues(soiltypeval,j),-4);
-        else
-            paramValue = roundn(paramValues(soiltypeval,j),-4);
-        end
-        selectIN.setData(paramList(j),paramValue,1) % last arg selects material
-    end
+%     selectIN = SELECTORIN(expDirectory);
+%     for j=1:length(paramList)
+%         if j == 5
+%             paramValue = roundn(paramValues(soiltypeval,j),-2); 
+%         elseif j == 3
+%             paramValue = roundn(paramValues(soiltypeval,j),-4);
+%         else
+%             paramValue = roundn(paramValues(soiltypeval,j),-4);
+%         end
+%         selectIN.setData(paramList(j),paramValue,1) % last arg selects material
+%     end
     
 %   set other selector.in parameters
-    selectIN.setData('TPrint(1),TPrint(2),...,TPrint(MPL)',[endtime/numprinttimes:endtime/numprinttimes:endtime])
-    selectIN.setData('MPL',numprinttimes)
-    selectIN.setData('tMax',endtime)
+%     selectIN.setData('TPrint(1),TPrint(2),...,TPrint(MPL)',[endtime/numprinttimes:endtime/numprinttimes:endtime])
+%     selectIN.setData('MPL',numprinttimes)
+%     selectIN.setData('tMax',endtime)
 %   commits/writes changes to the file (overwrites previous file)
-    selectIN.update();        
+%     selectIN.update();        
 
 %   runs the simulation(s)
     Hydrus.run_hydrus(noCMDWindow)
 %   moves the input & output files for saving
-    Hydrus.outputResults(exp,num2str(ii))
+%     Hydrus.outputResults(exp,num2str(ii))
 
 %   collect results 
-    nodinf = NODINF(expDirectory);
-    data = nodinf.getAllData();
-    qvals(ii,:,:)=data(:,:,5); % flux = index 5
-
-    holdtopfluxval(ii)=topfluxval;
-    holdtopperiodval(ii)=topperiodval;
-    holdsoiltypeval(ii)=soiltypeval;
+%     nodinf = NODINF(expDirectory);
+%     data = nodinf.getAllData();
+%     qvals(ii,:,:)=data(:,:,5); % flux = index 5
+% 
+%     holdtopfluxval(ii)=topfluxval;
+%     holdtopperiodval(ii)=topperiodval;
+%     holdsoiltypeval(ii)=soiltypeval;
 
 end;
 
 % plot flux profiles in time
-for ii=1:numrealizs
-    toplotz=-1:-1:-size(qvals,3);    
-    toplotq=squeeze(qvals(ii,:,:));
-    plot(toplotq,toplotz);
-    hold on;
-end;
+% for ii=1:numrealizs
+%     toplotz=-1:-1:-size(qvals,3);    
+%     toplotq=squeeze(qvals(ii,:,:));
+%     plot(toplotq,toplotz);
+%     hold on;
+% end;
 
 
 
