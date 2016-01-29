@@ -1,7 +1,8 @@
 % ATMOSPHIN.m
 % Created by Derek Groenendyk
-% 1/27/2015
+% created 1/27/2015
 % This a class that accesses the ATMOSPH.IN file
+% modified 1/27/2016 by Ben Paras
 
 classdef ATMOSPHIN < handle
     properties
@@ -19,7 +20,7 @@ classdef ATMOSPHIN < handle
             fclose(atmosph.fid);
         end
        
-        function setData(atmosph,param,paramValue)
+        function setData(atmosph,param,paramValue,paramNum)
             for ii=1:length(atmosph.C)
                 sLine = textscan(atmosph.C{ii}, '%s');
                 ind = find(strcmp(param,sLine{1})==1);
@@ -44,7 +45,11 @@ classdef ATMOSPHIN < handle
                         for jj=ii+1:ii+length(paramValue)
                             kk = kk + 1;
                             sLine = textscan(atmosph.C{jj}, '%s','whitespace','');
-                            wline = writeLine(sLine{1},ind,num2str(paramValue(kk)));
+                            if length(ind) > 1
+                                wline = writeLine(sLine{1},ind(paramNum),num2str(paramValue(kk)));
+                            else
+                                wline = writeLine(sLine{1},ind,num2str(paramValue(kk)));
+                            end
                             atmosph.C{jj} = wline;
                         end
                         break
@@ -56,7 +61,7 @@ classdef ATMOSPHIN < handle
         function numAtm = countAtm(atmosph,ind)
             numAtm = 0;
             sLine = textscan(atmosph.C{ind+numAtm}, '%s');
-            while ~strcmp(sLine{1}{1},'end***')
+            while ~(strcmp(sLine{1}{1},'end***') || strcmp(sLine{1}{1},'***'))
                 numAtm = numAtm + 1;
                 sLine = textscan(atmosph.C{ind+numAtm}, '%s');
             end
