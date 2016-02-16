@@ -7,6 +7,7 @@
 classdef HYDRUS_Class
     properties
         expFileLocation;
+        D;
         fileExtList = {'.OUT' '.IN' '.TXT' '.DAT'};
     end
       
@@ -17,9 +18,15 @@ classdef HYDRUS_Class
         end
         function run_hydrus(hydrus,noCMDWindow,D)
             selectIN = SELECTORIN(hydrus.expFileLocation);
-            if nargin > 1
-                hydrus.D = D;
+%             if nargin > 1
+%                 
+%             end
+            % Fill in unset optional values.
+            switch nargin
+                case 1
+                    hydrus.D = D;
             end
+
             if noCMDWindow == 1
                 selectIN.setData('lEnter','f');
                 selectIN.update()

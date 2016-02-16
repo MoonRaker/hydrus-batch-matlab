@@ -87,12 +87,13 @@ classdef PROFILEDAT < handle
                     for jj=6:5+length(paramValue)
                         kk = kk + 1;
                         sLine = textscan(profile.C{jj}, '%s','whitespace','');
-                        if ind < 3
-                            val = sprintf('-%fe+%03d',paramValue(jj-5),exps(jj-5));
-                        else
-%                             val = sprintf('%fe%04d',paramValue(jj-5),exps(jj-5));
+                        
+                        if exps(jj-5) >= 0.
                             val = sprintf('%fe+%03d',paramValue(jj-5),exps(jj-5));
-                        end                            
+                        elseif exps(jj-5) < 0.
+                            val = sprintf('%fe%04d',paramValue(jj-5),exps(jj-5));
+                        end
+                        
                         wline = writeLine(sLine{1},ind,val);
                         profile.C{jj} = wline;
                     end

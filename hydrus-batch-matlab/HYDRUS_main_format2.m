@@ -42,10 +42,10 @@ rsoilhold = repmat([-1],1,36);
 Prechold = repmat([1 0],1,18);
 
 % number of realizations to run
-numrealizs=1;
+numrealizs=0;
 
 
-if false
+if true
 %     create PROFILE.DAT object
     profileDAT = PROFILEDAT(expDirectory);
 
@@ -62,7 +62,7 @@ if false
     profileDAT.setData('columnLength',columnLength)
     profileDAT.setData('numLayers',numLayers)
     profileDAT.setData('x',0:1:100)
-    profileDAT.setData('h',ones([numLayers,1])*-10.0)
+    profileDAT.setData('h',ones([numLayers,1])*-50.)
     profileDAT.setData('obsLoc',[10,20,30,40,50,60,70])
 
 %     commits/writes changes to the file (overwrites previous file)        
