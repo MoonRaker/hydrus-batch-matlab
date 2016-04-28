@@ -8,10 +8,19 @@ function [ wline ] = writeLine( string, index, param, lspaces )
     else
         [starts, paramLens, whitespaces] = readLine(string);
     end
+    starts
+    paramLens
+    whitespaces
     sLine = textscan(string{1}, '%s');
     sLine = sLine{1};
     oldLen = paramLens(index);
     newLen = length(param);
+    
+    if newLen > oldLen + whitespaces(index)
+        param = sprintf('%e', str2num(param))
+        newLen = length(param)
+    end
+    
     paramLens(index) = newLen;
     sLine(index) = cellstr(param);
 

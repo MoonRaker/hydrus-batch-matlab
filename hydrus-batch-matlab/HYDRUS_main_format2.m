@@ -9,7 +9,7 @@ clc;
 
 noCMDWindow = 0; %set to 1 to NOT have to press enter after each simulation
         
-exp = 'Test'; % directory main name
+exp = 'Heat_Demo_colin'; % directory main name
 % exp = 'Cyclic'; % directory main name
 % mainDirectory = 'C:\Temp\HYDRUS_Data\';
 mainDirectory = 'C:\Derek\ProgrammingFolder\HYDRUS_Data\Projects\';
@@ -45,7 +45,7 @@ Prechold = repmat([1 0],1,18);
 numrealizs=0;
 
 
-if true
+if false
 %     create PROFILE.DAT object
     profileDAT = PROFILEDAT(expDirectory);
 
@@ -68,6 +68,30 @@ if true
 %     commits/writes changes to the file (overwrites previous file)        
     profileDAT.update()
 end
+
+    
+paramList = {'Qn','Qo','Dispr.','B1','B2','B3','Cn', 'Co','Cw'};
+paramList = {'B3','Cn', 'Co','Cw'};
+param_heat = [0.57 0 5 1.56728e+016 2.53474e+016 9.89388e+016 1.43327e+014 1.8737e+014 3.12035e+014 ]; %loam
+param_heat = [9.89388e+016 1.43327e+014 1.8737e+014 3.12035e+014];
+
+selectIN = SELECTORIN(expDirectory);
+
+ind = 1; %Soil type number
+paramValues = param_heat;
+for ii = 1:2
+    if ii == 5
+        paramValue = roundn(paramValues(ind,ii),-2);
+    elseif ii == 3
+        paramValue = roundn(paramValues(ind,ii),-4);
+    else
+        paramValue = roundn(paramValues(ind,ii),-4);
+    end
+    paramList(ii)
+    selectIN.setData(paramList(ii),paramValue,ind) % last arg selects material
+    selectIN.update();
+end
+
 
 
 for ii=1:numrealizs
@@ -95,7 +119,13 @@ for ii=1:numrealizs
 %     atmosphIN.setData('SinusVar','f')
     
 %   commits/writes changes to the file (overwrites previous file)
-%     atmosphIN.update()        
+%     atmosphIN.update()
+
+    selectIN = SELECTORIN(expDirectory);
+    selectIN.setData('B3',10.89388e+016);
+    selectIN.setData('Alfa',0.054);
+    selectIN.update();
+
 
 %   set soil parameters
 %     selectIN = SELECTORIN(expDirectory);
@@ -118,7 +148,7 @@ for ii=1:numrealizs
 %     selectIN.update();        
 
 %   runs the simulation(s)
-    Hydrus.run_hydrus(noCMDWindow)
+%     Hydrus.run_hydrus(noCMDWindow)
 %   moves the input & output files for saving
 %     Hydrus.outputResults(exp,num2str(ii))
 
